@@ -4,6 +4,7 @@ My configuration of the Suckless st
 I have applied patches:
  - scrollback 
  - hidecursor
+ - palettes (my variant, also with dedicated bg, fg, and cursor colors)
 
 
 

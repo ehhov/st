@@ -93,44 +93,62 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
-/* Terminal colors (16 first used in escape sequence) */
-static const char *colorname[] = {
-	/* 8 normal colors */
-	"black",
-	"red3",
-	"green3",
-	"yellow3",
-	"blue2",
-	"magenta3",
-	"cyan3",
-	"gray90",
+/* Terminal colors (16 used in escape sequence) 
+ * 1-16 colors, bg, fg cursor */
+static const char *palettes[][259] = {
+    /* black      red        green      yellow     blue       magenta    cyan       white  bg fg cur */
+[0]={"#000000", "#FF2424", "#00c000", "#CC7700", "#0055FF", "#d769ce", "#1D97FC", "#B9BBB9",
+     "#D7EFDD", "#FB3737", "#40BF4A", "#E69119", "#3846ff", "#c779de", "#09B3B3", "#ffffff", 
+     [256] = "#e4f7e4", "#000000", "#000000"}, /* My light theme */
 
-	/* 8 bright colors */
-	"gray50",
-	"red",
-	"green",
-	"yellow",
-	"#5c5cff",
-	"magenta",
-	"cyan",
-	"white",
+[2]={"#000000", "#ff5555", "#50fa7b", "#FFB366", "#bd93f9", "#ff79c6", "#8be9fd", "#8B8BA7", 
+     "#34344B", "#FF4444", "#3DF56B", "#f1fa8c", "#B78CF2", "#F881C5", "#6EDEF7", "#ffffff", 
+     [256] = "#282a36", "#d8d8d2", "#d8d8d2"}, /* Dracula */
 
-	[255] = 0,
+[1]={"#002129", "#dc322f", "#859900", "#bf6f00", "#268bd2", "#d33682", "#2aa198", "#586e75", 
+     "#073642", "#cb4b16", "#586e00", "#a57b00", "#3374b6", "#8c71b4", "#43b1a1", "#fdf6e3", 
+     [256] = "#002b36", "#839496", "#93a1a1"}, /* Solarized dark */
 
-	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#555555",
+[4]={"#eee8d5", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#b5b5ab", 
+     "#ddd6c3", "#cb4b36", "#589e22", "#a39400", "#657bb3", "#6c71c4", "#589ea5", "#002b36", 
+     [256] = "#fdf6e3", "#556b73", "#586e75"}, /* Solarized light */
+
+[3]={"#3b4252", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#88c0d0", "#757C8A", 
+     "#383E4D", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#8fbcbb", "#eceff4", 
+     [256] = "#2e3440", "#d8dee9", "#d8dee9"}, /* Nord theme */
+
+[5]={"#282828", "#cc241d", "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#95836A", 
+     "#37352F", "#fb4934", "#b8bb26", "#fabd2f", "#83a598", "#d3869b", "#8ec07c", "#ebdbb2", 
+     [256] = "#282828", /* hard #1d2021 / soft #32302f */ "#ebdbb2", "#ebdbb2"}, /* Gruvbox dark */
+
+[6]={"#fbf1c7", "#cc241d", "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#BEAD9D", 
+     "#F5EBBC", "#9d0006", "#79740e", "#b57614", "#076678", "#8f3f71", "#427b58", "#3c3836", 
+     [256] = "#fbf1c7", /* hard #f9f5d7 / soft #f2e5bc */ "#3c3836", "#3c3836"}, /* Gruvbox light */
+
+[7]={"#555555", "#E06C75", "#98C379", "#f5dd7B", "#60aaff", "#C678DD", "#46c6b2", "#c0c0c0", 
+     "#777777", "#dd0000", "#00dd00", "#eebb33", "#5c5cff", "#dd00dd", "#22aacc", "#ffffff", 
+     [256] = "#222222", "#cccccc", "#cccccc"}, /* My dark theme */
+
+[8]={"#073642", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#eee8d5", 
+     "#002b36", "#cb4b16", "#586e75", "#657b83", "#839496", "#6c71c4", "#93a1a1", "#fdf6e3", 
+     [256] = "#002b36", "#a3b4b6", "#93a1a1"}, /* Solarized dark original */
+
+[9]={"#eee8d5", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#073642", 
+     "#fdf6e3", "#cb4b16", "#93a1a1", "#839496", "#657b83", "#6c71c4", "#586e75", "#002b36", 
+     [256] = "#fdf6e3", "#657b83", "#586e75"}, /* Solarized light original */
 };
+
+static const char **colorname;
 
 
 /*
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 7;
-unsigned int defaultbg = 0;
-static unsigned int defaultcs = 256;
-static unsigned int defaultrcs = 257;
+unsigned int defaultfg = 257;
+unsigned int defaultbg = 256;
+static unsigned int defaultcs = 258;
+static unsigned int defaultrcs = 256;
 
 /*
  * Default shape of cursor
@@ -186,6 +204,8 @@ static MouseShortcut mshortcuts[] = {
 /* Internal keyboard shortcuts. */
 #define MODKEY Mod1Mask
 #define TERMMOD (ControlMask|ShiftMask)
+#define Ctrl ControlMask
+#define Alt Mod1Mask
 
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
@@ -203,6 +223,25 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ Ctrl|Alt,             XK_1,           setpalette,     {.i =  0} },
+	{ Ctrl|Alt,             XK_2,           setpalette,     {.i =  1} },
+	{ Ctrl|Alt,             XK_3,           setpalette,     {.i =  2} },
+	{ Ctrl|Alt,             XK_4,           setpalette,     {.i =  3} },
+	{ Ctrl|Alt,             XK_5,           setpalette,     {.i =  4} },
+	{ Ctrl|Alt,             XK_6,           setpalette,     {.i =  5} },
+	{ Ctrl|Alt,             XK_7,           setpalette,     {.i =  6} },
+	{ Ctrl|Alt,             XK_8,           setpalette,     {.i =  7} },
+	{ Ctrl|Alt,             XK_9,           setpalette,     {.i =  8} },
+	{ Ctrl|Alt,             XK_q,           setpalette,     {.i =  9} },
+	{ Ctrl|Alt,             XK_w,           setpalette,     {.i = 10} },
+	{ Ctrl|Alt,             XK_e,           setpalette,     {.i = 11} },
+	{ Ctrl|Alt,             XK_r,           setpalette,     {.i = 12} },
+	{ Ctrl|Alt,             XK_t,           setpalette,     {.i = 13} },
+	{ Ctrl|Alt,             XK_y,           setpalette,     {.i = 14} },
+	{ Ctrl|Alt,             XK_u,           setpalette,     {.i = 15} },
+	{ Ctrl|Alt,             XK_i,           setpalette,     {.i = 16} },
+	{ Ctrl|Alt,             XK_o,           setpalette,     {.i = 17} },
+	{ Ctrl|Alt,             XK_p,           setpalette,     {.i = 18} },
 };
 
 /*
