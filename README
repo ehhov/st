@@ -3,6 +3,7 @@ My configuration of the Suckless st
 
 I have applied patches:
  - scrollback 
+ - hidecursor
 
 
 
