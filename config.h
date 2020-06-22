@@ -5,15 +5,17 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Monospace:size=10:antialias=true:autohint=true"; 
-//static char *font = "Terminus (TTF):pixelsize=22:antialias=true:autohint=true";
+static char *font = "monospace:size=9:antialias=true:autohint=true";
+//static char *font = "uw ttyp0:pixelsize=18:antialias=false:autohint=true";
+//static char *font = "xos4 Terminus:pixelsize=18:antialias=false:autohint=true";
+//static char *font = "Terminus (TTF):pixelsize=22:antialias=false:autohint=true";
 
 /* Spare fonts */
 static char *font2[] = {
 	"Monospace:antialias=true:autohint=true",
 	"Symbola:antialias=true:autohint=true"
 };
-static int borderpx = 2;
+static int borderpx = 5;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -41,7 +43,7 @@ static float chscale = 1.0;
  *
  * More advanced example: L" `'\"()[]{}"
  */
-wchar_t *worddelimiters = L" ";
+wchar_t *worddelimiters = L" `'\"()[]{}";
 
 /* selection timeouts (in milliseconds) */
 static unsigned int doubleclicktimeout = 300;
@@ -72,7 +74,7 @@ static unsigned int blinktimeout = 800;
 /*
  * thickness of underline and bar cursors
  */
-static unsigned int cursorthickness = 2;
+static unsigned int cursorthickness = 3;
 
 /*
  * bell volume. It must be a value between -100 and 100. Use 0 for disabling
@@ -100,49 +102,61 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
-/* Terminal colors (16 used in escape sequence) 
+/* Terminal colors (16 used in escape sequence)
  * 1-16 colors, bg, fg cursor */
 static const char *palettes[][259] = {
-    /* black      red        green      yellow     blue       magenta    cyan       white  bg fg cur */
-[0]={"#000000", "#FF2424", "#00c000", "#CC7700", "#0055FF", "#d769ce", "#1D97FC", "#B9BBB9",
-     "#D7EFDD", "#FB3737", "#40BF4A", "#E69119", "#3846ff", "#c779de", "#09B3B3", "#ffffff", 
-     [256] = "#e4f7e4", "#000000", "#000000"}, /* My light theme */
+     /* black      red        green      yellow     blue       magenta    cyan       white  bg fg cur */
+ [3]={"#000000", "#FF2424", "#00c000", "#CC7700", "#0055FF", "#d769ce", "#1D97FC", "#B9BBB9",
+      "#D7EFDD", "#FB3737", "#40BF4A", "#E69119", "#3846ff", "#c779de", "#09B3B3", "#ffffff",
+      [256] = "#e4f7e4", "#000000", "#000000"}, /* My light theme */
 
-[2]={"#000000", "#ff5555", "#50fa7b", "#FFB366", "#bd93f9", "#ff79c6", "#8be9fd", "#8B8BA7", 
-     "#34344B", "#FF4444", "#3DF56B", "#f1fa8c", "#B78CF2", "#F881C5", "#6EDEF7", "#ffffff", 
-     [256] = "#282a36", "#d8d8d2", "#d8d8d2"}, /* Dracula */
+ [0]={"#000000", "#d73a49", "#2cbe4e", "#e36209", "#005cc5", "#f34b7d", "#00add8", "#babfc4",
+      "#eff2f6", "#cb2431", "#2c974b", "#f97732", "#036ee7", "#6f42c1", "#00b4ab", "#ffffff",
+      [256] = "#f6f8fa", "#24292e", "#24292e"}, /* GitHub */
 
-[1]={"#002129", "#dc322f", "#859900", "#bf6f00", "#268bd2", "#d33682", "#2aa198", "#586e75", 
-     "#073642", "#cb4b16", "#586e00", "#a57b00", "#3374b6", "#8c71b4", "#43b1a1", "#fdf6e3", 
-     [256] = "#002b36", "#839496", "#93a1a1"}, /* Solarized dark */
+ [2]={"#000000", "#ff5555", "#50fa7b", "#FFB366", "#bd93f9", "#ff79c6", "#8be9fd", "#8B8BA7",
+      "#34344B", "#FF4444", "#3DF56B", "#f1fa8c", "#B78CF2", "#F881C5", "#6EDEF7", "#ffffff",
+      [256] = "#282a36", "#d8d8d2", "#d8d8d2"}, /* Dracula */
 
-[4]={"#eee8d5", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#b5b5ab", 
-     "#ddd6c3", "#cb4b36", "#589e22", "#a39400", "#657bb3", "#6c71c4", "#589ea5", "#002b36", 
-     [256] = "#fdf6e3", "#556b73", "#586e75"}, /* Solarized light */
+ [4]={"#3b4252", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#88c0d0", "#757C8A",
+      "#383E4D", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#8fbcbb", "#eceff4",
+      [256] = "#2e3440", "#d8dee9", "#d8dee9"}, /* Nord theme */
 
-[3]={"#3b4252", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#88c0d0", "#757C8A", 
-     "#383E4D", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#8fbcbb", "#eceff4", 
-     [256] = "#2e3440", "#d8dee9", "#d8dee9"}, /* Nord theme */
+ [1]={"#002129", "#dc322f", "#859900", "#bf6f00", "#268bd2", "#d33682", "#2aa198", "#586e75",
+      "#073642", "#cb4b16", "#586e00", "#a57b00", "#3374b6", "#8c71b4", "#43b1a1", "#fdf6e3",
+      [256] = "#002b36", "#839496", "#93a1a1"}, /* Solarized dark */
 
-[5]={"#282828", "#cc241d", "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#95836A", 
-     "#37352F", "#fb4934", "#b8bb26", "#fabd2f", "#83a598", "#d3869b", "#8ec07c", "#ebdbb2", 
-     [256] = "#282828", /* hard #1d2021 / soft #32302f */ "#ebdbb2", "#ebdbb2"}, /* Gruvbox dark */
+ [7]={"#eee8d5", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#b5b5ab",
+      "#ddd6c3", "#cb4b36", "#589e22", "#a39400", "#657bb3", "#6c71c4", "#589ea5", "#002b36",
+      [256] = "#fdf6e3", "#556b73", "#586e75"}, /* Solarized light */
 
-[6]={"#fbf1c7", "#cc241d", "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#BEAD9D", 
-     "#F5EBBC", "#9d0006", "#79740e", "#b57614", "#076678", "#8f3f71", "#427b58", "#3c3836", 
-     [256] = "#fbf1c7", /* hard #f9f5d7 / soft #f2e5bc */ "#3c3836", "#3c3836"}, /* Gruvbox light */
+ [5]={"#101010", "#efa6a2", "#80c990", "#a69460", "#a3b8ef", "#e6a3dc", "#50cacd", "#808080",
+      "#252525", "#e0af85", "#5accaf", "#c8c874", "#ccaced", "#f2a1c2", "#74c3e4", "#c0c0c0",
+      [256] = "#101010", "#c0c0c0", "#c0c0c0"}, /* other dark */
 
-[7]={"#555555", "#E06C75", "#98C379", "#f5dd7B", "#60aaff", "#C678DD", "#46c6b2", "#c0c0c0", 
-     "#777777", "#dd0000", "#00dd00", "#eebb33", "#5c5cff", "#dd00dd", "#22aacc", "#ffffff", 
-     [256] = "#222222", "#cccccc", "#cccccc"}, /* My dark theme */
+ [6]={"#2E3436", "#CC0000", "#4B910B", "#C4A000", "#3465A4", "#755079", "#06989A", "#916E86",
+      "#401C35", "#EF2929", "#8AE234", "#FCE94F", "#729FCF", "#AD7FA8", "#34E2E2", "#EEEEEC",
+      [256] = "#300a24", "#ffffff", "#ffffff"}, /* Ubuntu */
 
-[8]={"#073642", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#eee8d5", 
-     "#002b36", "#cb4b16", "#586e75", "#657b83", "#839496", "#6c71c4", "#93a1a1", "#fdf6e3", 
-     [256] = "#002b36", "#a3b4b6", "#93a1a1"}, /* Solarized dark original */
+ [8]={"#282828", "#cc241d", "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#95836A",
+      "#37352F", "#fb4934", "#b8bb26", "#fabd2f", "#83a598", "#d3869b", "#8ec07c", "#ebdbb2",
+      [256] = "#282828", /* hard #1d2021 / soft #32302f */ "#ebdbb2", "#ebdbb2"}, /* Gruvbox dark */
 
-[9]={"#eee8d5", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#073642", 
-     "#fdf6e3", "#cb4b16", "#93a1a1", "#839496", "#657b83", "#6c71c4", "#586e75", "#002b36", 
-     [256] = "#fdf6e3", "#657b83", "#586e75"}, /* Solarized light original */
+ [9]={"#fbf1c7", "#cc241d", "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#BEAD9D",
+      "#F5EBBC", "#9d0006", "#79740e", "#b57614", "#076678", "#8f3f71", "#427b58", "#3c3836",
+      [256] = "#fbf1c7", /* hard #f9f5d7 / soft #f2e5bc */ "#3c3836", "#3c3836"}, /* Gruvbox light */
+
+[10]={"#555555", "#E06C75", "#98C379", "#f5dd7B", "#60aaff", "#C678DD", "#46c6b2", "#c0c0c0",
+      "#777777", "#dd0000", "#00dd00", "#eebb33", "#5c5cff", "#dd00dd", "#22aacc", "#ffffff",
+      [256] = "#222222", "#cccccc", "#cccccc"}, /* My dark theme */
+
+[11]={"#073642", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#eee8d5",
+      "#002b36", "#cb4b16", "#586e75", "#657b83", "#839496", "#6c71c4", "#93a1a1", "#fdf6e3",
+      [256] = "#002b36", "#a3b4b6", "#93a1a1"}, /* Solarized dark original */
+
+[12]={"#eee8d5", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198", "#073642",
+      "#fdf6e3", "#cb4b16", "#93a1a1", "#839496", "#657b83", "#6c71c4", "#586e75", "#002b36",
+      [256] = "#fdf6e3", "#657b83", "#586e75"}, /* Solarized light original */
 };
 
 static const char **colorname;
@@ -177,7 +191,7 @@ static unsigned int rows = 24;
 /*
  * Default colour and shape of the mouse cursor
  */
-static unsigned int mouseshape = XC_xterm;
+static unsigned int mouseshape = XC_left_ptr;
 static unsigned int mousefg = 7;
 static unsigned int mousebg = 0;
 
@@ -228,9 +242,13 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
+	{ MODKEY,               XK_v,           selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ Ctrl,                 XK_minus,       zoom,           {.f = -1} },
+	{ Ctrl,                 XK_equal,       zoom,           {.f = +1} },
+	{ Ctrl,                 XK_0,           zoomreset,      {.f =  0} },
 	{ Ctrl|Alt,             XK_1,           setpalette,     {.i =  0} },
 	{ Ctrl|Alt,             XK_2,           setpalette,     {.i =  1} },
 	{ Ctrl|Alt,             XK_3,           setpalette,     {.i =  2} },
@@ -240,16 +258,17 @@ static Shortcut shortcuts[] = {
 	{ Ctrl|Alt,             XK_7,           setpalette,     {.i =  6} },
 	{ Ctrl|Alt,             XK_8,           setpalette,     {.i =  7} },
 	{ Ctrl|Alt,             XK_9,           setpalette,     {.i =  8} },
-	{ Ctrl|Alt,             XK_q,           setpalette,     {.i =  9} },
-	{ Ctrl|Alt,             XK_w,           setpalette,     {.i = 10} },
-	{ Ctrl|Alt,             XK_e,           setpalette,     {.i = 11} },
-	{ Ctrl|Alt,             XK_r,           setpalette,     {.i = 12} },
-	{ Ctrl|Alt,             XK_t,           setpalette,     {.i = 13} },
-	{ Ctrl|Alt,             XK_y,           setpalette,     {.i = 14} },
-	{ Ctrl|Alt,             XK_u,           setpalette,     {.i = 15} },
-	{ Ctrl|Alt,             XK_i,           setpalette,     {.i = 16} },
-	{ Ctrl|Alt,             XK_o,           setpalette,     {.i = 17} },
-	{ Ctrl|Alt,             XK_p,           setpalette,     {.i = 18} },
+	{ Ctrl|Alt,             XK_0,           setpalette,     {.i =  9} },
+	{ Ctrl|Alt,             XK_q,           setpalette,     {.i = 10} },
+	{ Ctrl|Alt,             XK_w,           setpalette,     {.i = 11} },
+	{ Ctrl|Alt,             XK_e,           setpalette,     {.i = 12} },
+	{ Ctrl|Alt,             XK_r,           setpalette,     {.i = 13} },
+	{ Ctrl|Alt,             XK_t,           setpalette,     {.i = 14} },
+	{ Ctrl|Alt,             XK_y,           setpalette,     {.i = 15} },
+	{ Ctrl|Alt,             XK_u,           setpalette,     {.i = 16} },
+	{ Ctrl|Alt,             XK_i,           setpalette,     {.i = 17} },
+	{ Ctrl|Alt,             XK_o,           setpalette,     {.i = 18} },
+	{ Ctrl|Alt,             XK_p,           setpalette,     {.i = 19} },
 };
 
 /*
