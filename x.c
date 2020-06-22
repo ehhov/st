@@ -1621,6 +1621,34 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 	 */
 	g.mode &= ATTR_BOLD|ATTR_ITALIC|ATTR_UNDERLINE|ATTR_STRUCK|ATTR_WIDE;
 
+	if (cursor_follows_color) { /* CURFOL all untill the comment below [1/3] */
+	uint32_t cc;
+ 	if (selected(cx, cy)) {
+		cc = g.bg;
+ 	} else {
+		g.mode |= ATTR_REVERSE;
+
+		if (g.mode & ATTR_BOLD && BETWEEN(g.fg, 0, 7))
+			cc = g.fg + 8;
+		else
+			cc = g.fg;
+ 	}
+
+	if (IS_TRUECOL(cc)) {
+		drawcol.color.alpha = 0xffff;
+		drawcol.color.red = TRUERED(cc);
+		drawcol.color.green = TRUEGREEN(cc);
+		drawcol.color.blue = TRUEBLUE(cc);
+	} else {
+		drawcol = dc.col[cc];
+ 	}
+
+	if (IS_SET(MODE_REVERSE)) {
+		drawcol.color.red = ~drawcol.color.red;
+		drawcol.color.green = ~drawcol.color.green;
+		drawcol.color.blue = ~drawcol.color.blue;
+ 	}
+	} else { /* CURFOL after if(cursor_follows_color) [2/3] */
 	if (IS_SET(MODE_REVERSE)) {
 		g.mode |= ATTR_REVERSE;
 		g.bg = defaultfg;
@@ -1641,6 +1669,7 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 		}
 		drawcol = dc.col[g.bg];
 	}
+	}	/* CURFOL after if(cursor_follows_color) [3/3] */
 
 	/* draw the new one */
 	if (IS_SET(MODE_FOCUSED)) {

@@ -156,6 +156,7 @@ unsigned int defaultfg = 257;
 unsigned int defaultbg = 256;
 static unsigned int defaultcs = 258;
 static unsigned int defaultrcs = 256;
+static const int cursor_follows_color = 1; /* some say it may be unstable */
 
 /*
  * Default shape of cursor

@@ -2,11 +2,17 @@ My configuration of the Suckless st
 ===================================
 
 I have applied patches:
- - scrollback 
+ - scrollback
  - hidecursor
  - palettes (my variant, also with dedicated bg, fg, and cursor colors)
  - font2 (Symbola. This way st never stops on emojis)
 
+Other changes:
+ - (Not my own) Make cursor color follow text color.
+   https://git.suckless.org/st/commit/1911c9274d9b03f3d7999c6ce26e2d5169642d26.html
+   https://git.suckless.org/st/commit/b51bcd5553af3db394014efbd78acf7828fa48ff.html
+   https://git.suckless.org/st/commit/5535c1f04c665c05faff2a65d5558246b7748d49.html
+   Follow 'CURFOL' in x.c in xdrawcursor.
 
 
 
