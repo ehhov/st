@@ -5,6 +5,7 @@ I have applied patches:
  - scrollback 
  - hidecursor
  - palettes (my variant, also with dedicated bg, fg, and cursor colors)
+ - font2 (Symbola. This way st never stops on emojis)
 
 
 
